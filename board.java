@@ -62,17 +62,18 @@ public class board {
 
    /**
     * @exception CoordPair It needs an int CoordPair
+    * @exception Boolean if range checking is needed
     * @exception int color of who is try to move
     * @return Boolean if the move can be done
     **/
-   public boolean moveChecker(CoordPair move, int color) {
-      // checks in bounds
-      return move.x > 0 && move.x < size &&
-            move.y > 0 && move.x < size &&
-            // checks empty
-            curBoard[move.x][move.y] == 0 &&
+   public boolean moveChecker(CoordPair move, boolean checkRange, int color) {
+      // checks empty
+      return curBoard[move.x][move.y] == 0 &&
+      // checks in bounds if needed for example AI wont try a out of bounds move
+            !checkRange || // This uses short circuit logic to reduce checks
+            (move.x > 0 && move.x < size && move.y > 0 && move.x < size) &&
             // Checks valid addition
-            true; // WIP
+                  true; // WIP
    }
 
 }
