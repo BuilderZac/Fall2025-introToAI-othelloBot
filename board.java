@@ -4,6 +4,10 @@ public class board {
    int size = 8;
    String rows = "ABCDEFGH"; // Needed for moveReader
 
+   // A two int coord Pair
+   public record CoordPair(int x, int y) {
+   }
+
    board() {
       curBoard = new int[size][size];
       for (int i = 0; i < size; i++) {
@@ -13,6 +17,9 @@ public class board {
       }
    }
 
+   /**
+    * @return void prints the current board in systemOut
+    **/
    public void printBoard() {
       // Prints the x axis & letters
       System.out.print("Board Print:\n ABCDEFGH\n");
@@ -32,6 +39,9 @@ public class board {
       }
    }
 
+   /**
+    * @return void sets a blank board to the starting board state
+    **/
    public void setBoard() {
       curBoard[3][3] = 1;
       curBoard[3][4] = 2;
@@ -39,16 +49,30 @@ public class board {
       curBoard[4][3] = 2;
    }
 
-   public int moveReader(String move) {
-      int out = rows.indexOf(Character.toLowerCase(move.charAt(0))) * 10;
-      out += Integer.parseInt(move.substring(1, 2));
+   /**
+    * @exception String A move string in the format like A4 or f2
+    * @return CoordPair A formated CoordPair that is in acurate to the grid
+    **/
+   public CoordPair moveReader(String move) {
+      CoordPair out = new CoordPair(
+            rows.indexOf(Character.toLowerCase(move.charAt(0))) * 10,
+            Integer.parseInt(move.substring(1, 2)));
       return out;
    }
 
-   public boolean moveChecker(int move) {
-      if (curBoard[move / 10][move % 10] != 0) {
-         return false;
-      }
-      return true;
+   /**
+    * @exception CoordPair It needs an int CoordPair
+    * @exception int color of who is try to move
+    * @return Boolean if the move can be done
+    **/
+   public boolean moveChecker(CoordPair move, int color) {
+      // checks in bounds
+      return move.x > 0 && move.x < size &&
+            move.y > 0 && move.x < size &&
+            // checks empty
+            curBoard[move.x][move.y] == 0 &&
+            // Checks valid addition
+            true; // WIP
    }
+
 }
