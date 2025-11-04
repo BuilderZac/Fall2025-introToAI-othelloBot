@@ -71,7 +71,7 @@ public class board {
       return curBoard[move.x][move.y] == 0 &&
       // checks in bounds if needed for example AI wont try a out of bounds move
             !checkRange || // This uses short circuit logic to reduce checks
-            (move.x > 0 && move.x < size && move.y > 0 && move.x < size) &&
+            (move.x > 0 && move.x < size && move.y > 0 && move.y < size) &&
             // Checks valid addition
                   true; // WIP
    }
