@@ -2,7 +2,7 @@
 public class board {
    public int[][] curBoard;
    int size = 8;
-   String rows = "ABCDEFGH"; // Needed for moveReader
+   String rows = "abcdefgh"; // Needed for moveReader
 
    // A two int coord Pair
    public record CoordPair(int x, int y) {
@@ -66,8 +66,8 @@ public class board {
     */
    public CoordPair moveReader(String move) {
       CoordPair out = new CoordPair(
-            rows.indexOf(Character.toLowerCase(move.charAt(0))) * 10,
-            Integer.parseInt(move.substring(1, 2)));
+            rows.indexOf(Character.toLowerCase(move.charAt(0))),
+            Integer.parseInt(move.substring(1, 2)) - 1);
       return out;
    }
 
@@ -80,13 +80,14 @@ public class board {
     * @return True if the move is valid, false otherwise.
     */
    public boolean moveChecker(CoordPair move, boolean checkRange, int color) {
-      // check empty
-      if (curBoard[move.x][move.y] != 0) {
-         return false;
-      }
       // check in bounds
       if (checkRange &&
             (move.x < 0 || move.x >= size || move.y < 0 || move.y >= size)) {
+         return false;
+      }
+
+      // check empty
+      if (curBoard[move.x][move.y] != 0) {
          return false;
       }
       // check if move captures in any direction
@@ -221,7 +222,7 @@ public class board {
    public void setState(String state) {
       for (int i = 0; i < 8; i++) {
          for (int j = 0; j < 8; j++) {
-            curBoard[j][i] = state.charAt(i * 8 + j);
+            curBoard[j][i] = Character.getNumericValue(state.charAt(i * 8 + j));
          }
       }
    }
@@ -233,7 +234,7 @@ public class board {
     *
     * @return the current state string of the board
     */
-   public String printState() {
+   public String getState() {
       StringBuilder out = new StringBuilder(64);
       for (int i = 0; i < 8; i++) {
          for (int j = 0; j < 8; j++) {
