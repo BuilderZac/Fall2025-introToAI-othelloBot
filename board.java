@@ -1,4 +1,9 @@
 //This is our implimentation of a the othello game board.
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class board {
    public int[][] curBoard;
    int size = 8;
@@ -23,9 +28,8 @@ public class board {
 
    /**
     * Prints the current state of the board to standard output, displaying columns
-    * as letters (A-H)
-    * and rows as numbers (1-8). Empty cells show as '#', white as 'W', black as
-    * 'B'.
+    * as letters (A-H) and rows as numbers (1-8). Empty cells show as '#', white as
+    * 'W', black as 'B'.
     */
    public void printBoard() {
       // Prints the x axis & letters
@@ -47,9 +51,7 @@ public class board {
    }
 
    /**
-    * Resets the board to the standard starting position for an Othello/Reversi
-    * game,
-    * with white and black pieces in the center four squares.
+    * Resets the board to the standard starting position for an Othello game
     */
    public void setBoard() {
       curBoard[3][3] = 1;
@@ -95,7 +97,8 @@ public class board {
    }
 
    /**
-    * Checks if they can capture using cap
+    * Checks if they can capture in any direction. Does not give direction or how
+    * many
     *
     * @param move
     * @param color
@@ -114,8 +117,7 @@ public class board {
 
    /**
     * Checks if a move in a given direction results in capturing any opponent's
-    * pieces.
-    * Used as a helper in move checking logic.
+    * pieces. Used as a helper in move checking logic.
     *
     * @param move  The coordinate pair representing the move.
     * @param color The color making the move (1 for white, 2 for black).
@@ -229,8 +231,8 @@ public class board {
 
    /**
     * Outputs a 64-character string representation of the board,
-    * suitable for restoring the board via setState.
-    * The string is in row-major order.
+    * suitable for restoring the board via setState. The string is in row-major
+    * order.
     *
     * @return the current state string of the board
     */
@@ -243,4 +245,37 @@ public class board {
       }
       return out.toString();
    }
+
+   /**
+    * Gives a list of CoordPairs that boarder a given color & may be possible
+    * moves.
+    *
+    * @param color the color you want to find borders for
+    * @return An ArrayList<CoordPair> containg possible spots
+    */
+   public ArrayList<CoordPair> getBorderingEmptySlots(int color) {
+      ArrayList<CoordPair> bordering = new ArrayList<>();
+      Set<String> seen = new HashSet<>();
+      int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+      int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
+      for (int x = 0; x < size; x++) {
+         for (int y = 0; y < size; y++) {
+            if (curBoard[x][y] == color) {
+               for (int dir = 0; dir < 8; dir++) {
+                  int nx = x + dx[dir];
+                  int ny = y + dy[dir];
+                  if (nx >= 0 && nx < size && ny >= 0 && ny < size && curBoard[nx][ny] == 0) {
+                     String key = nx + "," + ny;
+                     if (!seen.contains(key)) {
+                        seen.add(key);
+                        bordering.add(new CoordPair(nx, ny));
+                     }
+                  }
+               }
+            }
+         }
+      }
+      return bordering;
+   }
+
 }

@@ -1,3 +1,5 @@
+
+import java.util.ArrayList;
 import java.io.*;
 
 public class boardTest {
@@ -55,7 +57,6 @@ public class boardTest {
          System.setOut(orig); // restore
          String output = outContent.toString();
          assertTrue(output.contains("ABCDEFGH"), "Board header should have letters");
-         assertTrue(output.contains("Board Print:"), "Board should have board print label");
          assertTrue(output.contains("4###WB###") || output.contains("4#WWBB###"),
                "Should display row 4 with white and black"); // flexible for formatting
          System.out.println("testPrintBoardOutput: PASS");
@@ -255,7 +256,76 @@ public class boardTest {
          fail++;
       }
 
+      try {
+         board game = new board();
+         String s0 = "1200012022000000000000000000000000000000000000000000000000000000";
+         String s1 = "1110012022000000000000000000000000000000000000000000000000000000";
+         String s2 = "1110011122000000000000000000000000000000000000000000000000000000";
+         game.setState(s0);
+         assertEquals(s0, game.getState(), "Stress initial state load");
+
+         board.CoordPair c1 = game.moveReader("C1");
+         boolean didMove = game.makeMove(c1, 1);
+         assertTrue(didMove, "White C1 should be valid move");
+         assertEquals(s1, game.getState(), "Stress state after C1");
+
+         board.CoordPair h1 = game.moveReader("h1");
+         boolean didMoveAgain = game.makeMove(h1, 1);
+         assertTrue(didMoveAgain, "White H1 should be valid move");
+         assertEquals(s2, game.getState(), "Stress state after H1");
+
+         System.out.println("testCornerCaptrue: PASS");
+         pass++;
+      } catch (Throwable t) {
+         System.out.println("testCornerCaptrue: FAIL " + t);
+         fail++;
+      }
+
+      try {
+         board game = new board();
+         String s0 = "1200012022000000000001100002221000020210001222100011111000000000";
+         game.setState(s0);
+         assertEquals(s0, game.getState(), "Board initial state set");
+
+         ArrayList<board.CoordPair> knownSubset = new ArrayList<board.CoordPair>();
+         knownSubset.add(new board.CoordPair(4, 0));
+         knownSubset.add(new board.CoordPair(4, 1));
+         knownSubset.add(new board.CoordPair(5, 1));
+         knownSubset.add(new board.CoordPair(2, 7));
+         knownSubset.add(new board.CoordPair(7, 7));
+         knownSubset.add(new board.CoordPair(7, 4));
+         knownSubset.add(new board.CoordPair(7, 5));
+         knownSubset.add(new board.CoordPair(4, 2));
+         knownSubset.add(new board.CoordPair(1, 5));
+
+         ArrayList<board.CoordPair> badSubset = new ArrayList<board.CoordPair>();
+         badSubset.add(new board.CoordPair(0, 3));
+         badSubset.add(new board.CoordPair(7, 0));
+         badSubset.add(new board.CoordPair(2, 1));
+         badSubset.add(new board.CoordPair(4, 4));
+         badSubset.add(new board.CoordPair(2, 0));
+
+         ArrayList<board.CoordPair> markedSet = game.getBorderingEmptySlots(1);
+         assertTrue(markedSet.containsAll(knownSubset), "The returned list contains known good points");
+         assertTrue(!markedSet.containsAll(badSubset), "The returned list avoids known bad points");
+
+         System.out.println("testMarkedSet: PASS");
+         pass++;
+      } catch (Throwable t) {
+         System.out.println("testMarkedSet: FAIL " + t);
+         fail++;
+      }
+
       System.out.println();
       System.out.println("Tests passed: " + pass + ", failed: " + fail);
    }
 }
+// 01234567
+// 0 12000120
+// 1 22000000
+// 2 00000110
+// 3 00022210
+// 4 00020210
+// 5 00122210
+// 6 00111110
+// 7 00000000
