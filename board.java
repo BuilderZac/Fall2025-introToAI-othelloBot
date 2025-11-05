@@ -29,7 +29,7 @@ public class board {
     */
    public void printBoard() {
       // Prints the x axis & letters
-      System.out.print("Board Print:\n ABCDEFGH\n");
+      System.out.print(" ABCDEFGH\n");
       for (int i = 1; i < size + 1; i++) {
          System.out.print(i);
          // Prints the y axis & numbers
