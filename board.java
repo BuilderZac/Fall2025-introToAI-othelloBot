@@ -33,8 +33,7 @@ public class board {
     */
    public void printBoard() {
       // Prints the x axis & letters
-      System.out.print(" ABCDEFGH\n");
-      for (int i = 1; i < size + 1; i++) {
+      for (int i = size; i > 0; i--) {
          System.out.print(i);
          // Prints the y axis & numbers
          for (int j = 0; j < size; j++) {
@@ -46,8 +45,9 @@ public class board {
                System.out.print("B");
             }
          }
-         System.out.print("\n");
+         System.out.println();
       }
+      System.out.print(" ABCDEFGH\n");
    }
 
    /**
