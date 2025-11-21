@@ -8,6 +8,7 @@ public class board {
    public int[][] curBoard;
    int size = 8;
    String rows = "abcdefgh"; // Needed for moveReader
+   //
 
    // A two int coord Pair
    public record CoordPair(int x, int y) {
@@ -48,16 +49,17 @@ public class board {
          System.out.println();
       }
       System.out.print(" ABCDEFGH\n");
+      System.out.print(" 12345678\n");
    }
 
    /**
     * Resets the board to the standard starting position for an Othello game
     */
    public void setBoard() {
-      curBoard[3][3] = 1;
-      curBoard[3][4] = 2;
-      curBoard[4][4] = 1;
-      curBoard[4][3] = 2;
+      curBoard[3][3] = 2;
+      curBoard[3][4] = 1;
+      curBoard[4][4] = 2;
+      curBoard[4][3] = 1;
    }
 
    /**
